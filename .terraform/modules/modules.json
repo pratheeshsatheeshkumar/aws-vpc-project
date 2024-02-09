@@ -1,1 +1,1 @@
-{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"vpc","Source":"file:///home/ubuntu/vpc-module","Dir":".terraform/modules/vpc"}]}
+{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"vpc","Source":"file:///home/ubuntu/vpc_module","Dir":".terraform/modules/vpc"}]}

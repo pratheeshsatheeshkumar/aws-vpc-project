@@ -1,5 +1,5 @@
 variable "project" {
-  default     = "uber"
+  default     = "oorja"
   description = "name of the project"
 
 }
@@ -27,7 +27,7 @@ variable "vpc_cidr_block" {
   default = "172.17.0.0/16"
 }
 
-variable "zomato-prod-public1-config" {
+variable "teevra-dev-public1-config" {
   type = map(any)
   default = {
     cidr = "172.17.0.0/18"
@@ -35,7 +35,7 @@ variable "zomato-prod-public1-config" {
   }
 }
 
-variable "zomato-prod-public2-config" {
+variable "teevra-dev-public2-config" {
   type = map(any)
   default = {
     cidr = "172.17.64.0/18"
@@ -43,7 +43,7 @@ variable "zomato-prod-public2-config" {
   }
 }
 
-variable "zomato-prod-private1-config" {
+variable "teevra-dev-private1-config" {
   type = map(any)
   default = {
     cidr = "172.17.128.0/18"

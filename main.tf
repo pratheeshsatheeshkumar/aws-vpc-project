@@ -1,16 +1,16 @@
 module "vpc" {
-  source = "/home/ubuntu/vpc-module"
+  source = "/home/ubuntu/vpc_module"
   project = var.project
   env = var.env
   vpc_cidr_block = var.vpc_cidr_block
   subnet-public-config = {
-    cidr = var.zomato-prod-public1-config.cidr
-    az   = var.zomato-prod-public1-config.az
+    cidr = var.teevra-dev-public1-config.cidr
+    az   = var.teevra-dev-public1-config.az
   }
 
   subnet-private-config = {
-    cidr = var.zomato-prod-private1-config.cidr
-    az   = var.zomato-prod-private1-config.az
+    cidr = var.teevra-dev-private1-config.cidr
+    az   = var.teevra-dev-private1-config.az
   }
 }
 
@@ -26,7 +26,7 @@ resource "aws_key_pair" "aws-keypair" {
 
 #Creation of security group for zomato-frontend
 
-resource "aws_security_group" "zomato-prod-frontend-sg" {
+resource "aws_security_group" "frontend-sg" {
   name_prefix = "${var.project}-${var.env}-frontend-sg-"
   description = "allow http, https and ssh traffic"
   vpc_id      = module.vpc.vpc_id
@@ -77,7 +77,7 @@ resource "aws_security_group" "zomato-prod-frontend-sg" {
 
 #Creation of security group for zomato-bastion
 
-resource "aws_security_group" "zomato-prod-bastion-sg" {
+resource "aws_security_group" "bastion-sg" {
   name_prefix = "${var.project}-${var.env}-bastion-sg-"
   description = "allow http, https and ssh traffic"
   vpc_id      = module.vpc.vpc_id
@@ -110,7 +110,7 @@ resource "aws_security_group" "zomato-prod-bastion-sg" {
 
 #creation of backend security group
 
-resource "aws_security_group" "zomato-prod-backend-sg" {
+resource "aws_security_group" "backend-sg" {
   name_prefix = "${var.project}-${var.env}-backend-sg-"
   description = "allow sql and ssh traffic"
   vpc_id      = module.vpc.vpc_id
@@ -119,7 +119,7 @@ resource "aws_security_group" "zomato-prod-backend-sg" {
     from_port       = 3306
     to_port         = 3306
     protocol        = "tcp"
-    security_groups = [aws_security_group.zomato-prod-frontend-sg.id]
+    security_groups = [aws_security_group.frontend-sg.id]
 
 
   }
@@ -128,7 +128,7 @@ resource "aws_security_group" "zomato-prod-backend-sg" {
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
-    security_groups = [aws_security_group.zomato-prod-bastion-sg.id]
+    security_groups = [aws_security_group.bastion-sg.id]
   }
 
   egress {
@@ -154,10 +154,10 @@ resource "aws_security_group" "zomato-prod-backend-sg" {
 resource "aws_instance" "zomato-prod-frontend" {
   ami                         = var.instance_ami
   associate_public_ip_address = true
-  subnet_id                   = module.vpc.public-subnet
+  subnet_id                   = module.vpc.public
   instance_type               = var.instance_type
   key_name                    = "${var.project}-${var.env}-keypair"
-  vpc_security_group_ids      = [aws_security_group.zomato-prod-frontend-sg.id]
+  vpc_security_group_ids      = [aws_security_group.frontend-sg.id]
   tags = {
     "Name" = "${var.project}-${var.env}-frontend"
   }
